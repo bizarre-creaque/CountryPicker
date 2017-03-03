@@ -14,4 +14,7 @@
 @property (nonatomic, strong) IBOutlet UILabel *nameLabel;
 @property (nonatomic, strong) IBOutlet UILabel *codeLabel;
 
+@property (weak, nonatomic) IBOutlet CountryPicker *picker;
+
+
 @end

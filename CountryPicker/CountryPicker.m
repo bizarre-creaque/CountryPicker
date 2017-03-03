@@ -49,13 +49,15 @@
 
 @interface CountryPicker () <UIPickerViewDelegate, UIPickerViewDataSource>
 
+@property (nonatomic, strong) NSArray *customCountryNames;
+
 @end
 
 
 @implementation CountryPicker
 
 // delegate doesn't use _ prefix to avoid name clash with superclass
-@synthesize delegate, labelFont = _labelFont;
+@synthesize delegate, labelFont = _labelFont, customCountryNames;
 
 + (NSArray *)countryNames
 {
@@ -145,6 +147,12 @@
     //does nothing
 }
 
+- (void)setCountryNames:(NSArray *)names
+{
+    self.customCountryNames = names;
+    [self reloadAllComponents];
+}
+
 - (void)setSelectedCountryCode:(NSString *)countryCode animated:(BOOL)animated
 {
     NSUInteger index = [[[self class] countryCodes] indexOfObject:countryCode];
@@ -222,7 +230,7 @@
 
 - (NSInteger)pickerView:(__unused UIPickerView *)pickerView numberOfRowsInComponent:(__unused NSInteger)component
 {
-    return (NSInteger)[[self class] countryCodes].count;
+    return self.customCountryNames.count ? (NSInteger)self.customCountryNames.count : (NSInteger)[[self class] countryCodes].count;
 }
 
 - (UIView *)pickerView:(__unused UIPickerView *)pickerView viewForRow:(NSInteger)row
@@ -246,8 +254,14 @@
         flagView.tag = 2;
         [view addSubview:flagView];
     }
-
-    ((UILabel *)[view viewWithTag:1]).text = [[self class] countryNames][(NSUInteger)row];
+    
+    NSString *countryName = @"";
+    if (self.customCountryNames.count) {
+        countryName = self.customCountryNames[(NSUInteger)row];
+    } else {
+        countryName = [[self class] countryNames][(NSUInteger)row];
+    }
+    ((UILabel *)[view viewWithTag:1]).text = countryName;
     NSString *imagePath = [NSString stringWithFormat:@"CountryPicker.bundle/%@", [[self class] countryCodes][(NSUInteger) row]];
     UIImage *image;
     if ([[UIImage class] respondsToSelector:@selector(imageNamed:inBundle:compatibleWithTraitCollection:)])

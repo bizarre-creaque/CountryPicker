@@ -10,7 +10,23 @@
 
 @implementation ViewController
 
-@synthesize nameLabel, codeLabel;
+@synthesize nameLabel, codeLabel, picker;
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    /*
+    [self.picker setCountryNames:@[
+                                   @"Argentina",
+                                   @"Chile",
+                                   @"Colombia",
+                                   @"Ecuador",
+                                   @"Peru",
+                                   @"Uruguay",
+                                   @"Venezuela"
+                                   ]];
+     */
+}
 
 - (void)countryPicker:(__unused CountryPicker *)picker didSelectCountryWithName:(NSString *)name code:(NSString *)code
 {
