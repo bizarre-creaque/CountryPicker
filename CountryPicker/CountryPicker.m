@@ -205,6 +205,9 @@
 - (NSString *)selectedCountryName
 {
     NSUInteger index = (NSUInteger)[self selectedRowInComponent:0];
+    if (self.customCountryNames.count) {
+        return self.customCountryNames[index];
+    }
     return [[self class] countryNames][index];
 }
 
