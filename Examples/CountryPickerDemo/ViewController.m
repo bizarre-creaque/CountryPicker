@@ -15,7 +15,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    /*
+    self.picker.rowOffset = 100;
     [self.picker setCountryNames:@[
                                    @"Argentina",
                                    @"Chile",
@@ -25,7 +25,7 @@
                                    @"Uruguay",
                                    @"Venezuela"
                                    ]];
-     */
+     
 }
 
 - (void)countryPicker:(__unused CountryPicker *)picker didSelectCountryWithName:(NSString *)name code:(NSString *)code

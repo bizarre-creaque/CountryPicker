@@ -50,6 +50,7 @@
 @interface CountryPicker () <UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong) NSArray *customCountryNames;
+@property (nonatomic, strong) NSArray *customCountryCodes;
 
 @end
 
@@ -57,7 +58,7 @@
 @implementation CountryPicker
 
 // delegate doesn't use _ prefix to avoid name clash with superclass
-@synthesize delegate, labelFont = _labelFont, customCountryNames;
+@synthesize delegate, labelFont = _labelFont, customCountryNames, customCountryCodes, rowOffset;
 
 + (NSArray *)countryNames
 {
@@ -150,12 +151,18 @@
 - (void)setCountryNames:(NSArray *)names
 {
     self.customCountryNames = names;
+    self.customCountryCodes = [[[[self class] countryCodesByName] objectsForKeys:names notFoundMarker:@""] copy];
     [self reloadAllComponents];
 }
 
 - (void)setSelectedCountryCode:(NSString *)countryCode animated:(BOOL)animated
 {
-    NSUInteger index = [[[self class] countryCodes] indexOfObject:countryCode];
+    NSUInteger index = 0;
+    if (self.customCountryNames.count) {
+        index = [self.customCountryCodes indexOfObject:countryCode];
+    } else {
+        index = [[[self class] countryCodes] indexOfObject:countryCode];
+    }
     if (index != NSNotFound)
     {
         [self selectRow:(NSInteger)index inComponent:0 animated:animated];
@@ -170,12 +177,20 @@
 - (NSString *)selectedCountryCode
 {
     NSUInteger index = (NSUInteger)[self selectedRowInComponent:0];
+    if (self.customCountryCodes.count) {
+       return self.customCountryCodes[index];
+    }
     return [[self class] countryCodes][index];
 }
 
 - (void)setSelectedCountryName:(NSString *)countryName animated:(BOOL)animated
 {
-    NSUInteger index = [[[self class] countryNames] indexOfObject:countryName];
+    NSUInteger index = 0;
+    if (self.customCountryNames.count) {
+        index = [self.customCountryNames indexOfObject:countryName];
+    } else {
+        index = [[[self class] countryNames] indexOfObject:countryName];
+    }
     if (index != NSNotFound)
     {
         [self selectRow:(NSInteger)index inComponent:0 animated:animated];
@@ -240,7 +255,7 @@
     {
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 280, 30)];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(35, 3, 245, 24)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(35 + self.rowOffset, 3, 245, 24)];
         label.backgroundColor = [UIColor clearColor];
         label.tag = 1;
         if (self.labelFont)
@@ -249,7 +264,7 @@
         }
         [view addSubview:label];
         
-        UIImageView *flagView = [[UIImageView alloc] initWithFrame:CGRectMake(3, 3, 24, 24)];
+        UIImageView *flagView = [[UIImageView alloc] initWithFrame:CGRectMake(3 + self.rowOffset, 3, 24, 24)];
         flagView.contentMode = UIViewContentModeScaleAspectFit;
         flagView.tag = 2;
         [view addSubview:flagView];

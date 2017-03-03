@@ -70,6 +70,9 @@
 /// and is notified when a country is selected.
 @property (nonatomic, weak) id<CountryPickerDelegate> delegate;
 
+/// Use this if you want to move row title to left.
+@property (nonatomic, assign) CGFloat rowOffset;
+
 /// The currently selected country name. This is a read-write property,
 /// so it can be used to set the picker value. Setting the picker to a country
 /// name that does not appear in the `countryNames` array has no effect.
@@ -90,7 +93,7 @@
 @property (nonatomic, copy) UIFont *labelFont;
 
 
-// This will replace all countries with the given ones.
+/// This will replace all countries with the given ones.
 - (void)setCountryNames:(NSArray *)names;
 
 /// These method allows you to set the current country code.
