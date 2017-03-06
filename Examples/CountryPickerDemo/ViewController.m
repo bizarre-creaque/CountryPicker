@@ -21,10 +21,20 @@
                                    @"Chile",
                                    @"Colombia",
                                    @"Ecuador",
-                                   @"Peru",
+                                   @"Perú",
                                    @"Uruguay",
                                    @"Venezuela"
                                    ]];
+    
+    [self.picker setCountryCodes:@[
+                                   @"AR",
+                                   @"CL",
+                                   @"CO",
+                                   @"EC",
+                                   @"PE",
+                                   @"UY",
+                                   @"VE"
+                                  ]];
      
 }
 

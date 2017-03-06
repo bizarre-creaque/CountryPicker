@@ -95,6 +95,7 @@
 
 /// This will replace all countries with the given ones.
 - (void)setCountryNames:(NSArray *)names;
+- (void)setCountryCodes:(NSArray *)codes;
 
 /// These method allows you to set the current country code.
 /// It works exactly like the equivalent property setter, but has an optional

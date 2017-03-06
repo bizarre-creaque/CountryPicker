@@ -151,7 +151,25 @@
 - (void)setCountryNames:(NSArray *)names
 {
     self.customCountryNames = names;
-    self.customCountryCodes = [[[[self class] countryCodesByName] objectsForKeys:names notFoundMarker:@""] copy];
+    if (!self.customCountryCodes.count) {
+        self.customCountryCodes = [[[[self class] countryCodesByName] objectsForKeys:names notFoundMarker:@""] copy];
+    }
+    [self reloadAllComponents];
+}
+
+- (void)setCountryCodes:(NSArray *)codes {
+    self.customCountryCodes = codes;
+    if (!self.customCountryNames.count) {
+        NSMutableArray *countryNames = [NSMutableArray new];
+        NSDictionary *allCountryNames = [[self class] countryNamesByCode];
+        for (NSString *code in codes) {
+            NSString *country = [allCountryNames allKeysForObject:code].firstObject;
+            if (country) {
+                [countryNames addObject:country];
+            }
+        }
+        self.customCountryNames = [NSArray arrayWithArray:countryNames];
+    }
     [self reloadAllComponents];
 }
 
@@ -280,7 +298,8 @@
         countryName = [[self class] countryNames][(NSUInteger)row];
     }
     ((UILabel *)[view viewWithTag:1]).text = countryName;
-    NSString *imagePath = [NSString stringWithFormat:@"CountryPicker.bundle/%@", [[self class] countryCodes][(NSUInteger) row]];
+    NSArray *countryCodes = self.customCountryCodes.count ? self.customCountryCodes : [[self class] countryCodes];
+    NSString *imagePath = [NSString stringWithFormat:@"CountryPicker.bundle/%@", countryCodes[(NSUInteger) row]];
     UIImage *image;
     if ([[UIImage class] respondsToSelector:@selector(imageNamed:inBundle:compatibleWithTraitCollection:)])
     {
